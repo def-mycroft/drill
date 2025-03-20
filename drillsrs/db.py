@@ -114,21 +114,21 @@ class Card(Base):
     )
 
     first_answer_date = sa.orm.column_property(
-        sa.sql.expression.select([sa.sql.expression.func.min(UserAnswer.date)])
+        sa.sql.expression.select(sa.sql.expression.func.min(UserAnswer.date))
         .where(UserAnswer.card_id == id)
         .correlate_except(UserAnswer)
         .scalar_subquery()
     )
 
     total_answer_count = sa.orm.column_property(
-        sa.sql.expression.select([sa.sql.expression.func.count(UserAnswer.id)])
+        sa.sql.expression.select(sa.sql.expression.func.count(UserAnswer.id))
         .where(UserAnswer.card_id == id)
         .correlate_except(UserAnswer)
         .scalar_subquery()
     )
 
     correct_answer_count = sa.orm.column_property(
-        sa.sql.expression.select([sa.sql.expression.func.count(UserAnswer.id)])
+        sa.sql.expression.select(sa.sql.expression.func.count(UserAnswer.id))
         .where(UserAnswer.card_id == id)
         .where(UserAnswer.is_correct == 1)
         .correlate_except(UserAnswer)
@@ -136,7 +136,7 @@ class Card(Base):
     )
 
     incorrect_answer_count = sa.orm.column_property(
-        sa.sql.expression.select([sa.sql.expression.func.count(UserAnswer.id)])
+        sa.sql.expression.select(sa.sql.expression.func.count(UserAnswer.id))
         .where(UserAnswer.card_id == id)
         .where(UserAnswer.is_correct == 0)
         .correlate_except(UserAnswer)
@@ -146,6 +146,7 @@ class Card(Base):
 
 class Deck(Base):
     __tablename__ = "deck"
+    __allow_unmapped__ = True
 
     id: int = sa.Column("id", sa.Integer, primary_key=True)
     cards: List[Card] = sa.orm.relationship(
