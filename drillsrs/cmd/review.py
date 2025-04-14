@@ -3,6 +3,8 @@ import random
 from datetime import datetime
 from typing import Any, List, Optional
 
+from zero_poker_strat.helpers import make_node_note
+
 from drillsrs import db, scheduler, util
 from drillsrs.cli_args import Mode
 from drillsrs.cmd.command_base import CommandBase
@@ -53,6 +55,9 @@ def _review_single_card(
                 break
             except ValueError:
                 continue
+
+        # make note 
+        make_node_note(raw_question)
 
         if choice == 0:
             is_correct = False
